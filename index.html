@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👶 宝宝成长记录 - 共享页面</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 { font-size: 24px; margin-bottom: 8px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        .content { padding: 20px; }
+        .day-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .day-selector select {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .section h2 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section p, .section li {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .section ul { list-style: none; padding-left: 0; }
+        .section li { padding: 4px 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        th { background: #e9ecef; color: #333; font-weight: 600; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-green { background: #d4edda; color: #155724; }
+        .badge-yellow { background: #fff3cd; color: #856404; }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            color: #999;
+            font-size: 12px;
+            border-top: 1px solid #eee;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+            color: #856404;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        .empty-state p { font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👶 宝宝成长记录</h1>
+            <p id="current-date">加载中...</p>
+        </div>
+        <div class="content">
+            <div class="day-selector">
+                <select id="date-select" onchange="loadRecord()">
+                    <option value="2026-04-17">2026-04-17 星期五</option>
+                </select>
+            </div>
+            <div id="record-content">
+                <!-- 记录内容将动态加载 -->
+            </div>
+        </div>
+        <div class="footer">
+            📅 由 AI 助手整理 | 最后更新：<span id="last-updated">加载中...</span>
+        </div>
+    </div>
+
+    <script>
+        // 记录数据
+        const records = {
+            "2026-04-17": {
+                date: "2026 年 4 月 17 日 星期五",
+                schedule: {
+                    wake: "8:30 前",
+                    nap: "14:00 - 15:30（1.5 小时）",
+                    sleep: "待记录"
+                },
+                food: [
+                    { type: "🥣 早餐", content: "粥、蒸鸡蛋、猪肉饼" },
+                    { type: "🍝 午餐", content: "番茄鸡蛋面、牛肉饼" },
+                    { type: "🥛 加餐", content: "鲜奶 150ml" }
+                ],
+                activities: [
+                    { time: "☀️ 上午", activity: "出门玩 2 小时" },
+                    { time: "🌤️ 下午", activity: "出门玩（进行中）" }
+                ],
+                mood: "状态正常",
+                health: "截至目前未排便",
+                note: "💡 小提醒：如果晚上睡前还没排便，可以给宝宝顺时针揉揉小肚子，帮助肠道蠕动。",
+                updateTime: "2026-04-17 16:26"
+            }
+        };
+
+        function loadRecord() {
+            const date = document.getElementById('date-select').value;
+            const record = records[date];
+            
+            if (!record) {
+                document.getElementById('record-content').innerHTML = `
+                    <div class="empty-state">
+                        <p>📭 这天还没有记录</p>
+                    </div>
+                `;
+                return;
+            }
+
+            document.getElementById('current-date').textContent = record.date;
+            document.getElementById('last-updated').textContent = record.updateTime;
+
+            const html = `
+                <div class="section">
+                    <h2>🕖 作息时间</h2>
+                    <ul>
+                        <li>🌅 <strong>起床</strong>：${record.schedule.wake}</li>
+                        <li>😴 <strong>午睡</strong>：${record.schedule.nap}</li>
+                        <li>🌙 <strong>睡觉</strong>：${record.schedule.sleep}</li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h2>🍚 饮食记录</h2>
+                    <table>
+                        <tr><th>餐次</th><th>内容</th></tr>
+                        ${record.food.map(f => `<tr><td>${f.type}</td><td>${f.content}</td></tr>`).join('')}
+                    </table>
+                </div>
+                <div class="section">
+                    <h2>🎮 游玩活动</h2>
+                    <ul>
+                        ${record.activities.map(a => `<li><strong>${a.time}</strong>：${a.activity}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="section">
+                    <h2>😊 情绪状态</h2>
+                    <p>${record.mood} <span class="badge badge-green">✅ 良好</span></p>
+                </div>
+                <div class="section">
+                    <h2>📝 健康备注</h2>
+                    <p><strong>排便</strong>：<span class="badge badge-yellow">⏳ ${record.health}</span></p>
+                    <div class="note">${record.note}</div>
+                </div>
+            `;
+
+            document.getElementById('record-content').innerHTML = html;
+        }
+
+        // 页面加载时显示今天的记录
+        window.onload = loadRecord;
+    </script>
+</body>
+</html>
