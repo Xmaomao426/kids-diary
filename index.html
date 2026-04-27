@@ -98,7 +98,7 @@
         <div class="content">
             <div class="stats">
                 <div class="stat-item">
-                    <div class="stat-number">48</div>
+                    <div class="stat-number">50</div>
                     <div class="stat-label">记录天数</div>
                 </div>
                 <div class="stat-item">
@@ -112,7 +112,9 @@
             </div>
             <div class="day-selector">
                 <select id="date-select" onchange="loadRecord()">
-                    <option value="2026-04-21">2026 年4月21日 周二</option>
+                    <option value="2026-04-27">2026 年4月27日 周一</option>
+<option value="2026-04-26">2026 年4月26日 周日</option>
+<option value="2026-04-21">2026 年4月21日 周二</option>
 <option value="2026-04-20">2026 年4月20日 周一</option>
 <option value="2026-04-19">2026 年4月19日 周日</option>
 <option value="2026-04-18">2026 年4月18日 周六</option>
@@ -193,6 +195,22 @@
 
     <script>
         const records = {
+        "2026-04-27": {
+                "date": "2026 年4月27日 周一",
+                "schedule": "下午 3 点 20 开始睡觉",
+                "food": "早上 9 点多被喊醒，下楼吃早饭早饭后排便下午 1 点多，吃坚果面包猪肘切片，喝牛奶",
+                "play": "上午 11 点半出门，地铁到自然博物馆",
+                "health": "",
+                "other": "上海第二天没吃多少之后回房间，吃坚果粑粑柑"
+        },
+        "2026-04-26": {
+                "date": "2026 年4月26日 周日",
+                "schedule": "早上 9 点左右醒下午 5 点半睡到 6 点半晚 12 点睡觉\n早上 8 点多醒，漏尿了",
+                "food": "先喝奶，然后打车到南京站晚饭前喝牛奶\n早饭，牛奶千层饼菜包鳕鱼肠小番茄吃过早饭，妈妈和外婆带出门玩\n今天奶奶回湖北",
+                "play": "12 点 40 到站，打车去酒店下午 2 点左右，打车到南京路附近，吃羊肉面然后逛南京路，坐轮渡打车到前滩公园附近逛街",
+                "health": "今日未排便",
+                "other": "今天胖胖生日\n上午 11 点发车，前往上海车上吃鸡蛋玉米鳕鱼肠晚上 8 点左右，吃日料晚上 10 点左右回到酒店"
+        },
         "2026-04-21": {
                 "date": "2026 年4月21日 周二",
                 "schedule": "早上 8 点多醒\n下午 1 点多睡到 4 点多",
