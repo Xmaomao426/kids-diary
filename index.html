@@ -44,18 +44,13 @@
             transition: all 0.3s;
         }
         .day-selector select:hover { border-color: #764ba2; }
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 12px;
-            margin-bottom: 20px;
+        .record-summary {
+            margin-top: 8px;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
         }
-        .stat-item { text-align: center; }
-        .stat-number { font-size: 24px; font-weight: bold; }
-        .stat-label { font-size: 12px; opacity: 0.9; }
         .category {
             margin-bottom: 15px;
             padding: 15px;
@@ -97,22 +92,9 @@
             <p id="current-date">加载中...</p>
         </div>
         <div class="content">
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-number" id="record-count">0</div>
-                    <div class="stat-label">记录天数</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">📋</div>
-                    <div class="stat-label">分类查看</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">📝</div>
-                    <div class="stat-label">持续更新中</div>
-                </div>
-            </div>
             <div class="day-selector">
                 <select id="date-select" onchange="loadRecord()"></select>
+                <p class="record-summary" id="record-summary"></p>
             </div>
             <div id="record-content">
                 <div class="category category-schedule" id="cat-schedule" style="display:none">
@@ -639,11 +621,23 @@
         const DATA_VERSION_LABEL = "2026年7月19日（数据版本）";
         const categories = ['schedule', 'food', 'activity', 'health', 'behavior', 'family'];
 
+        function formatRecordDate(date, includeYear = true) {
+            const [year, month, day] = date.split('-').map(Number);
+            return `${includeYear ? `${year}年` : ''}${month}月${day}日`;
+        }
+
         function initializeDiary() {
             const dates = Object.keys(records);
+            const sortedDates = [...dates].sort();
+            const firstDate = sortedDates[0];
+            const lastDate = sortedDates[sortedDates.length - 1];
             const dateSelect = document.getElementById('date-select');
 
-            document.getElementById('record-count').textContent = dates.length;
+            if (firstDate && lastDate) {
+                const sameYear = firstDate.slice(0, 4) === lastDate.slice(0, 4);
+                document.getElementById('record-summary').textContent =
+                    `共 ${dates.length} 天记录｜${formatRecordDate(firstDate)}—${formatRecordDate(lastDate, !sameYear)}`;
+            }
             dateSelect.replaceChildren(...dates.map(date => {
                 const option = document.createElement('option');
                 option.value = date;
