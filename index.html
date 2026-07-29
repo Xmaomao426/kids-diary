@@ -655,7 +655,6 @@
         }
 };
 
-        const DATA_VERSION_LABEL = "2026年7月19日（数据版本）";
         const categories = ['schedule', 'food', 'activity', 'health', 'behavior', 'family'];
 
         function formatRecordDate(date, includeYear = true) {
@@ -682,7 +681,8 @@
                 return option;
             }));
 
-            document.getElementById('last-updated').textContent = DATA_VERSION_LABEL;
+            document.getElementById('last-updated').textContent =
+                lastDate ? `${formatRecordDate(lastDate)}（数据版本）` : '暂无数据';
             loadRecord();
         }
         
